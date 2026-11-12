@@ -14,6 +14,8 @@ export default defineConfig({
   defaultCommandTimeout: 5_000,
   retries: { runMode: 1, openMode: 0 },
   video: false,
+  // Public values go through expose / Cypress.expose(); Cypress.env() is not used.
+  allowCypressEnv: false,
   screenshotOnRunFailure: true,
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {

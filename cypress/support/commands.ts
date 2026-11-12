@@ -13,7 +13,10 @@ Cypress.Commands.add('login', (username: string = users.standard) => {
     loginPage.login(username, DEMO_PASSWORD);
     cy.location('pathname').should('eq', '/inventory.html');
   });
-  cy.visit('/inventory.html');
+  // SauceDemo answers a direct load of /inventory.html with a 404 status, then its
+  // client-side router renders the page from the session cookie. Relax the status
+  // check for this visit only; the specs' first assertions prove the page arrived.
+  cy.visit('/inventory.html', { failOnStatusCode: false });
 });
 
 /**
