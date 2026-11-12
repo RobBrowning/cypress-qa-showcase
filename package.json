@@ -1,0 +1,30 @@
+{
+  "name": "cypress-qa-showcase",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Cypress + TypeScript test automation showcase against public demo apps (UI, API and accessibility). Twin of playwright-qa-showcase.",
+  "author": "Rob Browning",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "cypress run",
+    "test:web": "cypress run --spec \"cypress/e2e/ui/**/*.cy.ts\"",
+    "test:mobile": "MOBILE=1 cypress run --spec \"cypress/e2e/ui/**/*.cy.ts\" --expose grepTags=@smoke,grepFilterSpecs=true",
+    "test:api": "cypress run --spec \"cypress/e2e/api/**/*.cy.ts\"",
+    "test:smoke": "cypress run --expose grepTags=@smoke,grepFilterSpecs=true",
+    "test:a11y": "cypress run --spec cypress/e2e/ui/a11y.cy.ts",
+    "typecheck": "tsc --noEmit",
+    "open": "cypress open --e2e"
+  },
+  "devDependencies": {
+    "@cypress/grep": "7.0.0",
+    "@types/node": "22.20.5",
+    "axe-core": "4.14.0",
+    "cypress": "15.21.1",
+    "cypress-axe": "1.7.0",
+    "cypress-mochawesome-reporter": "5.0.0",
+    "typescript": "5.9.3"
+  }
+}
