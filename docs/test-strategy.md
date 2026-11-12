@@ -87,4 +87,5 @@ Fixed when a test is written, so the suite stays legible as it grows:
 
 - Third-party demo apps can change or go down. The weekday scheduled run exists to detect that drift early; a failure there is triaged as "app changed" vs "test wrong" before anything else.
 - Restful-Booker resets its data periodically, so tests never rely on pre-existing bookings.
+- SauceDemo answers a direct load of `/inventory.html` with a 404 status, then renders the page client-side. `InventoryPage.visitDirect()` asserts that 404, so any other status still fails and a change in SauceDemo's behaviour is noticed.
 - The mobile run changes the viewport only. It does not emulate touch, pixel ratio or a mobile user agent (see ADR 0003).

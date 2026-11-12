@@ -1,3 +1,4 @@
+import { InventoryPage } from '../../src/pages/InventoryPage';
 import { LoginPage } from '../../src/pages/LoginPage';
 import { DEMO_PASSWORD, users } from '../../src/data/users';
 
@@ -13,10 +14,8 @@ Cypress.Commands.add('login', (username: string = users.standard) => {
     loginPage.login(username, DEMO_PASSWORD);
     cy.location('pathname').should('eq', '/inventory.html');
   });
-  // SauceDemo answers a direct load of /inventory.html with a 404 status, then its
-  // client-side router renders the page from the session cookie. Relax the status
-  // check for this visit only; the specs' first assertions prove the page arrived.
-  cy.visit('/inventory.html', { failOnStatusCode: false });
+  // Direct load: SauceDemo's 404 quirk is asserted inside visitDirect().
+  new InventoryPage().visitDirect();
 });
 
 /**

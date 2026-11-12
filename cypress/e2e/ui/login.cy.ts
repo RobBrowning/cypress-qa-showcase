@@ -41,9 +41,8 @@ describe('Login', () => {
   });
 
   it('inventory is not reachable without logging in', { tags: '@regression' }, () => {
-    // SauceDemo answers a direct hit on /inventory.html with a 404 status before its
-    // client-side router shows the error, so the status check is relaxed for this visit.
-    cy.visit('/inventory.html', { failOnStatusCode: false });
+    // visitDirect() asserts SauceDemo's 404 quirk on a direct load of this page.
+    inventoryPage.visitDirect();
     loginPage
       .error()
       .should('contain.text', "You can only access '/inventory.html' when you are logged in");
