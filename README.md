@@ -76,6 +76,7 @@ docs/
 ## Roadmap
 
 - [x] MVP: UI + API suites, page objects, custom commands, tags, axe checks, CI matrix
+- [x] PR governance: CODEOWNERS, PR template, ruleset on main
 - [ ] Bump GitHub Actions to Node 24 versions
 - [ ] Component tests for a small React login form and cart badge (`cypress/react`)
 - [ ] Contract-style schema validation on API responses
