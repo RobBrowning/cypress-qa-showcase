@@ -8,6 +8,16 @@ This is **cypress-qa-showcase**, a Cypress + TypeScript portfolio suite testing 
 
 Never use an em dash or en dash in any file. Use a colon, comma or full stop instead. Ordinary hyphens in compound words are fine.
 
+## Before you change anything
+
+- Read `docs/test-strategy.md` before adding, changing or removing a test.
+- Read `docs/adr/` before any structural change: page objects, commands, config or folders.
+- Accepted ADRs are binding. A change of decision means a new ADR; existing ADRs are never edited.
+- Only add a test if it replaces a named manual check. Otherwise record it in the strategy's "Deliberately not automated" table.
+- A test that differs from its Playwright twin is listed in the strategy's "Tests with no Playwright twin" section, with the reason and whether the twin needs it too.
+
+ADR index: @docs/adr/README.md
+
 ## Commands
 
 - `npm run typecheck`: must pass before any commit
