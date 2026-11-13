@@ -15,6 +15,7 @@ Never use an em dash or en dash in any file. Use a colon, comma or full stop ins
 - Accepted ADRs are binding. A change of decision means a new ADR; existing ADRs are never edited.
 - Only add a test if it replaces a named manual check. Otherwise record it in the strategy's "Deliberately not automated" table.
 - A test that differs from its Playwright twin is listed in the strategy's "Tests with no Playwright twin" section, with the reason and whether the twin needs it too.
+- Follow `docs/qa-workflows.md` when adding a test, running tests, debugging a failing test or reviewing a PR. Don't skip the steps it marks as most often skipped.
 
 ADR index: @docs/adr/README.md
 
