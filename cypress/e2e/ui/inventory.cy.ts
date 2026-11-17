@@ -28,6 +28,15 @@ describe('Inventory', () => {
     });
   });
 
+  it('sorts by name, A to Z', { tags: '@regression' }, () => {
+    // SauceDemo lists A to Z by default, so sort Z to A first: otherwise this passes even if sorting is broken.
+    inventory.sortBy('za');
+    inventory.sortBy('az');
+    inventory.names().then((names) => {
+      expect(names).to.deep.equal([...names].sort());
+    });
+  });
+
   it('cart badge tracks add and remove', { tags: '@smoke' }, () => {
     inventory.cartBadge().should('not.exist');
     inventory.addToCart('Sauce Labs Backpack');
