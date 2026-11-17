@@ -7,3 +7,5 @@ Accepted ADRs are binding. A change of decision gets a new ADR that supersedes t
 | [0001](0001-cypress-typescript.md) | Cypress + TypeScript | Accepted |
 | [0002](0002-page-objects-and-custom-commands.md) | Page objects plus a small set of custom commands | Accepted |
 | [0003](0003-cypress-vs-playwright.md) | Cypress vs Playwright, and when I would choose each | Accepted (revisit as both suites grow) |
+| [0004](0004-ai-pr-reviewer.md) | AI PR reviewer with the official Claude GitHub Action | Accepted |
+| [0005](0005-one-ai-reviewer-plus-on-demand-claude.md) | One AI reviewer, plus @claude on demand | Accepted |
