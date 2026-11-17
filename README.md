@@ -1,6 +1,7 @@
 # Cypress QA Showcase
 
 [![Cypress tests](https://github.com/RobBrowning/cypress-qa-showcase/actions/workflows/cypress.yml/badge.svg)](https://github.com/RobBrowning/cypress-qa-showcase/actions/workflows/cypress.yml)
+[![Claude PR Review](https://github.com/RobBrowning/cypress-qa-showcase/actions/workflows/claude-review.yml/badge.svg)](https://github.com/RobBrowning/cypress-qa-showcase/actions/workflows/claude-review.yml)
 
 A small, deliberately well-structured test automation project built with **Cypress + TypeScript**, run against two public demo apps:
 
@@ -20,8 +21,34 @@ It exists to show how I approach automation as a QA lead: **fewer, clearer tests
 - **[`cypress/support/commands.ts`](cypress/support/commands.ts)**: `cy.login()` cached with `cy.session()`, and the axe gate.
 - **[`cypress/e2e/`](cypress/e2e)**: UI, accessibility and API specs, each tagged `@smoke` or `@regression`.
 - **[`.github/workflows/cypress.yml`](.github/workflows/cypress.yml)**: typecheck gate, then a parallel matrix (desktop, mobile viewport, API), reports uploaded as artifacts, scheduled weekday run.
+- **[AI PR review](#ai-pr-review)**: every PR gets an automatic QA review from Claude, tuned to this repo's rules. See it in action on [PR #10](https://github.com/RobBrowning/cypress-qa-showcase/pull/10).
 - **[`docs/adr/`](docs/adr)**: lightweight Architecture Decision Records.
 - **[`CLAUDE.md`](CLAUDE.md)**: how this repo is set up for AI-assisted development with Claude Code.
+
+## AI PR review
+
+Every pull request gets an automatic first-pass review from Claude, using the official [Claude GitHub Action](https://github.com/anthropics/claude-code-action). It reviews like a QA lead, not a linter: it reads the PR's acceptance criteria first, then checks the tests against this repo's own rules.
+
+**What it checks** (rules in [`.github/claude-review-prompt.md`](.github/claude-review-prompt.md)):
+
+- Every acceptance criterion has a test. It posts an AC to test coverage table on each PR.
+- No fixed waits (`cy.wait(<number>)`) and no weakened assertions.
+- The conventions in [`CLAUDE.md`](CLAUDE.md) and the [ADRs](docs/adr): `byTest()` selectors, tags, page objects without assertions, twin parity with Playwright.
+
+**Guardrails:** comments only. The workflow token is read-only and Claude can only read the repo and post comments, so it can't push, approve or merge. CI, the `protect-main` ruleset and human approval still decide what merges, and every review thread must be resolved first. Decisions: [ADR 0004](docs/adr/0004-ai-pr-reviewer.md) and [ADR 0005](docs/adr/0005-one-ai-reviewer-plus-on-demand-claude.md).
+
+**How it was tested:** [PR #10](https://github.com/RobBrowning/cypress-qa-showcase/pull/10) was opened with four seeded defects, and reviewed by this QA-tuned reviewer and by Anthropic's generic code-review plugin side by side.
+
+| Seeded defect | QA-tuned reviewer | Generic reviewer |
+|---|---|---|
+| `cy.wait(2000)` | Caught (Blocker) | Caught |
+| CSS chain selector instead of `byTest()` | Caught (Major) | Caught |
+| Cart badge assertion weakened to `should('exist')` | Caught (Blocker), with a one-click fix | Caught |
+| An acceptance criterion with no test | Caught (Blocker) | Missed |
+
+It also found three real issues nobody seeded. The best: SauceDemo already lists products A to Z, so the new A to Z test could never fail. The fix sorts Z to A first. No false positives, about a minute per review. The findings were then fixed on the same PR. The reviewer re-checked each push and finished on "Ready for human review" with no findings.
+
+Need a second opinion on a PR? Mention `@claude` in a comment.
 
 ## Quick start
 
@@ -61,7 +88,11 @@ src/
   data/        Public demo accounts and customer data
 docs/
   test-strategy.md
+  qa-workflows.md
   adr/
+.github/
+  workflows/   CI (cypress.yml), AI PR review (claude-review.yml), @claude (claude.yml)
+  claude-review-prompt.md   Rules the AI reviewer checks
 ```
 
 ## Conventions
@@ -77,6 +108,7 @@ docs/
 
 - [x] MVP: UI + API suites, page objects, custom commands, tags, axe checks, CI matrix
 - [x] PR governance: CODEOWNERS, PR template, ruleset on main
+- [x] AI PR reviewer: QA-focused Claude review on every PR, tested against seeded defects
 - [ ] Bump GitHub Actions to Node 24 versions
 - [ ] Component tests for a small React login form and cart badge (`cypress/react`)
 - [ ] Contract-style schema validation on API responses

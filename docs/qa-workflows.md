@@ -11,6 +11,8 @@ In each flowchart, amber diamonds are decisions. Commands and paths are the real
 | [Debug a failing test](#3-debug-a-failing-test) | Anything is red, locally or in CI | 2: classify before fixing |
 | [Review a PR as QA](#4-review-a-pr-as-qa) | A PR is ready for review | 1: read the ACs before the code |
 
+Every PR also gets an automatic first-pass review from Claude (see [Review a PR as QA](#4-review-a-pr-as-qa), step 2). It doesn't replace any step here.
+
 ## 1. Add a new test
 
 ```mermaid
@@ -120,12 +122,13 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["1. Read the ticket and ACs before the code.<br/>What should be true?"] --> B{"2. Gates: CI green and every AC<br/>covered by a test or a written reason?"}
+    A["1. Read the ticket and ACs before the code.<br/>What should be true?"] --> AI["2. Read the Claude QA review.<br/>Blockers fixed or answered?"]
+    AI --> B{"3. Gates: CI green and every AC<br/>covered by a test or a written reason?"}
     B -- No --> R["Request changes: say which gate failed"]
-    B -- Yes --> C["3. Read the tests: selectors, one behaviour,<br/>tags, data per run, no fixed waits"]
-    C --> D["4. Pull the branch and try it.<br/>Explore past the ACs."]
-    D --> E["5. One batched review.<br/>Mark nit: or blocking:"]
-    E --> F{"6. Verdict: any blocking: comments?"}
+    B -- Yes --> C["4. Read the tests: selectors, one behaviour,<br/>tags, data per run, no fixed waits"]
+    C --> D["5. Pull the branch and try it.<br/>Explore past the ACs."]
+    D --> E["6. One batched review.<br/>Mark nit: or blocking:"]
+    E --> F{"7. Verdict: any blocking: comments?"}
     F -- No --> G["Approve"]
     F -- Yes --> R
     classDef decision fill:#f5b041,stroke:#b9770e,color:#000
@@ -133,11 +136,12 @@ flowchart TD
 ```
 
 1. **Read the ticket and ACs before the code.** Write down what should be true when the PR is merged.
-2. **Check the gates:**
+2. **Read the Claude QA review.** It lands about a minute after the PR opens or changes: an AC to test table plus inline comments marked `[Blocker]`, `[Major]` or `[Minor]`. Check every Blocker is fixed or answered with a reason. It's a first pass, not an approval: you still do every step below, and anything it lists under "Not checked" is yours. Ask it a follow-up with `@claude` in a comment.
+3. **Check the gates:**
    - CI is green: `typecheck`, `test (web)`, `test (mobile)`, `test (api)`.
    - Every AC is covered by a test or a written reason.
    - The PR template is filled in, including "Manual check replaced".
-3. **Read the tests:**
+4. **Read the tests:**
    - `byTest()` selectors
    - one behaviour per test
    - a `@smoke` or `@regression` tag
@@ -145,6 +149,6 @@ flowchart TD
    - no `cy.wait(<number>)`, no `async/await`
    - titles that match the Playwright twin
    - structural changes come with a new ADR
-4. **Try it:** `gh pr checkout <number>`, then `npm ci` and run the affected suite. This repo has no preview environment. Explore past the ACs: edge cases, the mobile viewport, a failing run.
-5. **Comment as one batched review**, not a stream of single comments. Start each comment with `nit:` (optional) or `blocking:` (must change before merge).
-6. **Verdict:** approve, or request changes with the reasons. All review threads must be resolved before `protect-main` allows the squash merge.
+5. **Try it:** `gh pr checkout <number>`, then `npm ci` and run the affected suite. This repo has no preview environment. Explore past the ACs: edge cases, the mobile viewport, a failing run.
+6. **Comment as one batched review**, not a stream of single comments. Start each comment with `nit:` (optional) or `blocking:` (must change before merge).
+7. **Verdict:** approve, or request changes with the reasons. All review threads, including Claude's, must be resolved before `protect-main` allows the squash merge.
