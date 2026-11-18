@@ -35,6 +35,7 @@ Show a realistic, maintainable approach to automating a web app and an API, not 
 | Test | Reason |
 |---|---|
 | `a11y.cy.ts` (3 tests) | Accessibility is on the Playwright repo's roadmap and was built here first. The Playwright version will reuse these titles. |
+
 ## Test selection
 
 Two questions drive what runs where:
