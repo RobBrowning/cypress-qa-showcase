@@ -34,7 +34,7 @@ Show a realistic, maintainable approach to automating a web app and an API, not 
 
 | Test | Reason |
 |---|---|
-| `a11y.cy.ts` (3 tests) | Accessibility is on the Playwright repo's roadmap and was built here first. The Playwright version will reuse these titles. |
+| (none) | Every Cypress test has a Playwright twin with the same title. The Playwright repo has two extra gate checks (`a11y-gate.spec.ts`); see its test strategy. |
 
 ## Test selection
 

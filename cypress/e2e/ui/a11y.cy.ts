@@ -3,9 +3,10 @@ import { InventoryPage } from '../../../src/pages/InventoryPage';
 import { LoginPage } from '../../../src/pages/LoginPage';
 
 /**
- * No Playwright twin yet: accessibility is on the Playwright roadmap. Fails on
- * serious and critical axe violations only. Known SauceDemo issues are listed by
- * rule ID in docs/test-strategy.md and passed in here, never switched off wholesale.
+ * Twin of playwright-qa-showcase tests/ui/a11y.spec.ts: same titles, same
+ * axe-core 4.14.0. Fails on serious and critical axe violations only. Known
+ * SauceDemo issues are listed by rule ID in docs/test-strategy.md and passed in
+ * here, never switched off wholesale.
  */
 const KNOWN_ISSUES: Record<'login' | 'inventory' | 'checkout', string[]> = {
   login: [],
